@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-14T15:03:36.282Z</updated>
+  <updated>2020-08-15T13:08:59.458Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>honggfuzz随机数生成和反馈接口</title>
+    <link href="http://yoursite.com/2020/08/15/honggfuzz/"/>
+    <id>http://yoursite.com/2020/08/15/honggfuzz/</id>
+    <published>2020-08-15T13:08:59.458Z</published>
+    <updated>2020-08-15T13:08:59.458Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="honggfuzz的随机数生成和覆盖率反馈接口"><a href="#honggfuzz的随机数生成和覆盖率反馈接口" class="headerlink" title="honggfuzz的随机数生成和覆盖率反馈接口?"></a><strong>honggfuzz的随机数生成和覆盖率反馈接口</strong>?</h5><p>覆盖率反馈接口：<code>fuzz_perfFeedback</code>发现新的覆盖后调用<code>input_addDynamicInput</code>，创建新的dynamic file加入到测试用例集。</p><p>随机数生成接口：<code>input_prepareDynamicInput</code>从之前的test case集合中根据按一定策略选择一个样本调用<code>mangle_mangleContent</code>来变异。</p><h5 id="honggfuzz如何存储这些test-cast呢"><a href="#honggfuzz如何存储这些test-cast呢" class="headerlink" title="honggfuzz如何存储这些test cast呢?"></a><strong>honggfuzz如何存储这些test cast呢</strong>?</h5><p>dynfileq是链表形式的<strong>优先队列</strong>，当发现新的覆盖率时，调用<code>fuzz_perfFeedback</code>，把测试用例放入优先队列。</p><h5 id="honggfuzz如何选择这些test-case呢"><a href="#honggfuzz如何选择这些test-case呢" class="headerlink" title="honggfuzz如何选择这些test case呢?"></a><strong>honggfuzz如何选择这些test case呢</strong>?</h5><p>在<code>input_prepareDynamicInput</code>中，选择本次的dynfileqCurrent，选择方法是：</p><ol><li>当前<code>run-&gt;global-&gt;io.dynfileq</code>的第一个子项。</li><li>如果第一个子项最大尝试次数耗尽，就依次尝试下一个子项。</li></ol><h5 id="honggfuzz针对test-case有哪些惩罚因子"><a href="#honggfuzz针对test-case有哪些惩罚因子" class="headerlink" title="honggfuzz针对test case有哪些惩罚因子?"></a><strong>honggfuzz针对test case有哪些惩罚因子</strong>?</h5><ol><li>低覆盖率惩罚</li><li>老文件惩罚</li><li>大文件惩罚</li></ol><h5 id="链表操作函数TAILQ-代码中找不到定义？"><a href="#链表操作函数TAILQ-代码中找不到定义？" class="headerlink" title="链表操作函数TAILQ_*代码中找不到定义？"></a><strong>链表操作函数TAILQ_*代码中找不到定义</strong>？</h5><p><code>TAILQ_FIRST</code>, <code>TAILQ_NEXT</code>定义于libc/include/sys/queue.h中，TAILQ队列是FreeBSD内核中一种队列结构，在一些著名开源库中(DPDK, libevent)中广泛使用。</p><p><code>hfuzz-&gt;io.dynfileq</code>是根结点，在解析cmdline时初始化</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cmdlineParse(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[], <span class="keyword">honggfuzz_t</span>* hfuzz)&#123;</span><br><span class="line">... TAILQ_INIT(&amp;hfuzz-&gt;io.dynfileq) ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h5 id=&quot;honggfuzz的随机数生成和覆盖率反馈接口&quot;&gt;&lt;a href=&quot;#honggfuzz的随机数生成和覆盖率反馈接口&quot; class=&quot;headerlink&quot; title=&quot;honggfuzz的随机数生成和覆盖率反馈接口?&quot;&gt;&lt;/a&gt;&lt;strong&gt;honggfuz</summary>
+      
+    
+    
+    
+    
+    <category term="fuzz阅读笔记" scheme="http://yoursite.com/tags/fuzz%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>基于Klee的内核测试用例自动生成</title>
